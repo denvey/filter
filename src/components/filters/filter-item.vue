@@ -9,13 +9,12 @@
         <div>{{item.name}}</div>
       </li>
     </ul>
-    <ul v-else>
-
-    </ul>
+    <ul v-else></ul>
   </div>
 </template>
 
 <script>
+    let queryData = [];
   export default {
     name: 'filter-item',
     props: {
@@ -49,7 +48,7 @@
       return {
         activeIndex: activeIndexArry,
         selectIndex: 0,
-        level: 0,
+        level: 0
       }
     },
     computed: {
@@ -89,7 +88,7 @@
       onSelected(ulIndex, index, items) {
         if (ulIndex === this.level || items.items === undefined || items.items.length == 0) {
           this.activeIndex[this.selectIndex].data = items;
-          this.filterChange(this.activeData());
+          this.filterChange(items);
         } else if (ulIndex === 0) {
           this.selectIndex = index;
         }
@@ -111,7 +110,13 @@
         const name = this.activeIndex[this.selectIndex]['level' + index + 'Name'];
         if (id === item.id || name === item.name) {
           /*if (item.items === undefined || item.items.length === 0) {
-            this.activeDatas.push(item);
+              const tempData = queryData[this.selectIndex];
+              if ( tempData && tempData.length > 0 ) {
+                  queryData[this.selectIndex].push(item);
+              } else {
+                  queryData[this.selectIndex] = [];
+                  queryData[this.selectIndex].push(item);
+              }
           }*/
           return true;
         } else if (index < this.level && subIndex === 0 && !id && !name) {

@@ -49,7 +49,8 @@
           level1Index: 0,
           lastIndex: 0,
           type: this.filters[i].type,
-          name: this.filters[i].name
+          name: this.filters[i].name,
+          query: this.filters[i].items ? this.filters[i].items[0] : {}
         };
         if (query) {
           query.forEach((item) => {
@@ -57,12 +58,16 @@
             if (this.filters[i].type == arrTemp[0]) {
               this.filters[i].items.forEach(function (res) {
                 if (res.id == arrTemp[1]) {
-                  tempData.name = res.name
+                  tempData.name = res.name;
+                  tempData.query = res;
                 }
               })
             }
             this.getPathById(this.filters[i], item, (data) => {
-              queryData.push(data);
+                const ilen = data.length;
+                tempData.name = data[ilen - 1].name;
+                tempData.query = data[ilen - 1];
+                queryData.push(data);
             })
           })
         }
@@ -73,7 +78,6 @@
           tempObj = tempData;
         }
         data.push(tempObj);
-
       }
       return {
         actives: data,
@@ -133,12 +137,13 @@
         }
       },
       filterChange(data) {
-        this.activeData[this.selectIndex] = data;
-        let tempData = [];
-        this.activeData.map((item) => {
-          item.map((subItem) => {
-            tempData.push(subItem);
-          })
+        this.actives[this.selectIndex].query = data;
+          this.actives[this.selectIndex].name = data.name;
+          let tempData = [];
+        this.actives.map((item) => {
+//          item.map((subItem) => {
+            tempData.push(item.query);
+//          })
         });
         this.change(tempData);
         this.onCloseExpand();
@@ -210,7 +215,8 @@
           const queryArray = (data) => {
             path.push({
               name: data.name,
-              id: data.id
+              id: data.id,
+              type: data.type
             });
             if (data.type == queryParam[0] && data.id == queryParam[1]) {
               throw ("GOT IT!");
