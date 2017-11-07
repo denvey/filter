@@ -11,7 +11,9 @@
       <div v-show="expanded" class="filter-modal-overly" @click.self="onCloseExpand">
         <div class="select-multi-wrap">
           <template v-if="filterSub.length > 0" v-for="(item, index) in filterData">
-            <FilterItem v-show="index == selectIndex" :filter="item.items" :query="queryData"
+            <FilterItemTile v-if="item.display == 3" v-show="index == selectIndex" :filter="item" :query="queryData"
+                            :filterChange="filterChange"></FilterItemTile>
+            <FilterItem v-else v-show="index == selectIndex" :filter="item.items" :query="queryData"
                         :filterChange="filterChange"/>
           </template>
         </div>
@@ -22,6 +24,7 @@
 
 <script>
   import FilterItem from './filter-item.vue';
+  import FilterItemTile from './filter-item-tile.vue';
 
   export default {
     name: 'filters',
@@ -92,7 +95,8 @@
       }
     },
     components: {
-      FilterItem
+      FilterItem,
+      FilterItemTile
     },
     mounted() {
     },

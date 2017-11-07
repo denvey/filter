@@ -1,0 +1,219 @@
+div, ul, li{
+  margin: 0;
+  padding: 0;
+  outline: none;
+}
+*:not(input,textarea) {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+}
+body {
+  font-family: Hiragino Sans GB, Arial,Helvetica, "宋体", sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  background-color: #f0f0f0;
+}
+button, input, select, textarea {
+  font-size: 100%;
+  outline: none;
+}
+textarea, input, a{
+  -webkit-tap-highlight-color:rgba(0, 0, 0, 0);
+}
+textarea, input {
+  resize: none;
+}
+ul, ol {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+}
+del {
+  text-decoration: line-through;
+}
+
+.flexbox() {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+.flexbox-inline() {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: -webkit-inline-flex;
+  display: inline-flex;
+}
+.flex-wrap(@fw) when (@fw = nowrap) {
+  -webkit-box-lines: single;
+  -moz-box-lines: single;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: none;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+}
+.flex-wrap(@fw) when (@fw = wrap) {
+  -webkit-box-lines: multiple;
+  -moz-box-lines: multiple;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+.flex-wrap(@fw) when not (@fw = wrap) and not (@fw = nowrap) {
+  -webkit-flex-wrap: @fw;
+  -ms-flex-wrap: @fw;
+  flex-wrap: @fw;
+}
+.flex-shrink(@fs) {
+  -webkit-flex-shrink: @fs;
+  -ms-flex: 0 @fs auto;
+  flex-shrink: @fs;
+}
+.justify-content(@jc) when (@jc = flex-start) {
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  -webkit-justify-content: flex-start;
+  justify-content: flex-start;
+}
+.justify-content(@jc) when (@jc = flex-end) {
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  -webkit-justify-content: flex-end;
+  justify-content: flex-end;
+}
+.justify-content(@jc) when (@jc = space-between) {
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+}
+.justify-content(@jc) when not (@jc = flex-start) and not (@jc = flex-end) and not (@jc = space-between) {
+  -webkit-box-pack: @jc;
+  -ms-flex-pack: @jc;
+  -webkit-justify-content: @jc;
+  justify-content: @jc;
+}
+.align-items(@ai) when (@ai = flex-start) {
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  -webkit-align-items: flex-start;
+  align-items: flex-start;
+}
+.align-items(@ai) when (@ai = flex-end) {
+  -webkit-box-align: end;
+  -ms-flex-align: end;
+  -webkit-align-items: flex-end;
+  align-items: flex-end;
+}
+.align-items(@ai) when not (@ai = flex-start) and not (@ai = flex-end) {
+  -webkit-box-align: @ai;
+  -ms-flex-align: @ai;
+  -webkit-align-items: @ai;
+  align-items: @ai;
+}
+.align-content(@ai) {
+  -ms-flex-line-pack: @ai;
+  -webkit-align-content: @ai;
+  align-content: @ai;
+}
+.align-self(@as) {
+  -ms-flex-item-align: @as;
+  -webkit-align-self: @as;
+  align-self: @as;
+}
+
+.clearfix() {
+  &:before,
+  &:after {
+    content: " ";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+.hairline(@position, @color) when (@position = bottom) {
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: auto;
+    top: auto;
+    height: 1px;
+    width: 100%;
+    background-color: @color;
+    display: block;
+    z-index: 15;
+    .transform(scaleY(0.5));
+    .transform-origin(50% 100%);
+  }
+}
+
+.hairline(@position, @color, @radius) when (@position = all) {
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    top: 0;
+    height: 200%;
+    width: 200%;
+    border-radius: @radius;
+    border: 1px solid @color;
+    display: block;
+    z-index: 15;
+    .transform(scale(0.5));
+    .transform-origin(0 0);
+  }
+}
+
+.hairline-remove {
+  &:after {
+    display: none;
+  }
+}
+
+.scrollable(){
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.transform(@t) {
+  -webkit-transform: @t;
+  transform: @t;
+}
+
+.transform-origin(@to) {
+  -webkit-transform-origin: @to;
+  transform-origin: @to;
+}
+
+.row .col-50 {
+  width: 50%;
+  width: -webkit-calc(100%/ 2);
+  width: calc(100%/ 2)
+}
+
+.row .col-33 {
+  width: 33.333333333333336%;
+  width: -webkit-calc(100% / 3);
+  width: calc(100% / 3)
+}
+
+.row .col-25 {
+  width: 25%;
+  width: -webkit-calc(100% / 4);
+  width: calc(100%/ 4)
+}
+.row .col-20 {
+  width: 20%;
+  width: -webkit-calc(100%/ 5);
+  width: calc(100% / 5)
+}
+
