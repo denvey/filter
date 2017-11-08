@@ -14,12 +14,11 @@
 </template>
 
 <script>
-    let queryData = [];
   export default {
     name: 'filter-item',
     props: {
       filter: {
-        type: Array
+        type: Object
       },
       filterChange: {
         type: Function
@@ -30,11 +29,11 @@
     },
     data() {
       const activeIndexArry = [];
-      this.filter.map((item, index) => {
+      this.filter.items.map((item, index) => {
         activeIndexArry.push({
           level0: 0,
-          level0Id: item.id,
-          level0Name: item.name
+          level0Id: '',
+          level0Name: ''
         });
         this.query.map((queryItem) => {
           if (queryItem[1].name == item.name) {
@@ -55,7 +54,7 @@
       filterItems() {
         let tempItem = [];
         let i = 0;
-        tempItem.push(this.filter);
+        tempItem.push(this.filter.items);
         const handleItems = (data) => {
           if (data && data.length > 0) {
             let curIndex = 0;
@@ -76,7 +75,7 @@
             }
           }
         };
-        handleItems(this.filter);
+        handleItems(this.filter.items);
         this.level = i;
         return tempItem;
       }
@@ -108,6 +107,7 @@
       computedCur(item, index, subIndex) {
         const id = this.activeIndex[this.selectIndex]['level' + index + 'Id'];
         const name = this.activeIndex[this.selectIndex]['level' + index + 'Name'];
+        console.log(name);
         if (id === item.id || name === item.name) {
           /*if (item.items === undefined || item.items.length === 0) {
               const tempData = queryData[this.selectIndex];
@@ -120,6 +120,7 @@
           }*/
           return true;
         } else if (index < this.level && subIndex === 0 && !id && !name) {
+          console.log(11);
           return true;
         }
         return false;

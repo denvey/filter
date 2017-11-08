@@ -43,13 +43,14 @@
         this.query.map((queryItem) => {
           if (queryItem[1].name == item.name) {
             for (let i = 1, iLen = queryItem.length; i < iLen; i++) {
-              activeIndexArry[index][`level${i - 1}Name`] = queryItem[i].name;
-              activeIndexArry[index][`level${i - 1}Id`] = queryItem[i].Id;
+              activeIndexArry[index].levelName = queryItem[i].name;
+              activeIndexArry[index].levelId = queryItem[i].Id;
+              activeIndexArry[index].active = [queryItem[i].Id];
+              activeIndexArry[index].data = [queryItem[i]];
             }
           }
         });
       });
-      console.log(activeIndexArry);
       return {
         activeIndex: activeIndexArry,
         selectIndex: 0,
@@ -129,13 +130,12 @@
       completeClick() {
         let tempData = [];
         this.activeIndex.map((item, index) => {
-          console.log(item.data.length);
           if (item.data.length > 0) {
             item.data.map((subItem) => {
               tempData.push(subItem);
             })
-          } else {
-            tempData.push(item.data);
+          } else if (item.data[0]) {
+            tempData.push(item.data[0]);
           }
         });
         this.filterChange(tempData);

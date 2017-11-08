@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Filters v-if="filterData.length > 0" :filters="filterData" :query="selectParams" :change="change" />
+    <Filters v-if="filterData.length > 0" :filters="filterData"  :change="change" />
   </div>
 </template>
 
@@ -12,7 +12,7 @@ export default {
   data () {
     return {
       filterData: [],
-      selectParams: '1-842,2-1161'
+      selectParams: '1-842' // 2-1161
     }
   },
   components: {

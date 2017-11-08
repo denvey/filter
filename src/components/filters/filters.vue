@@ -4,7 +4,7 @@
       <li v-for="(item, index) in filterData"
           :class="['select-li', {cur: selectIndex === index}, 'col-' + Math.floor(100/filterData.length)]"
           @click="onExpand(index)">
-        <span class="select-title mb-text-ellipsis-1">{{actives[index].name}}</span>
+        <span class="select-title text-ellipsis-1">{{actives[index].name}}</span>
       </li>
     </ul>
     <transition name="slider">
@@ -13,7 +13,7 @@
           <template v-if="filterSub.length > 0" v-for="(item, index) in filterData">
             <FilterItemTile v-if="item.display == 3" v-show="index == selectIndex" :filter="item" :query="queryData"
                             :filterChange="filterChange"></FilterItemTile>
-            <FilterItem v-else v-show="index == selectIndex" :filter="item.items" :query="queryData"
+            <FilterItem v-else v-show="index == selectIndex" :filter="item" :query="queryData"
                         :filterChange="filterChange"/>
           </template>
         </div>
@@ -53,7 +53,7 @@
           lastIndex: 0,
           type: this.filters[i].type,
           name: this.filters[i].name,
-          query: this.filters[i].items ? this.filters[i].items[0] : {}
+          query: ''
         };
         if (query) {
           query.forEach((item) => {
@@ -101,30 +101,6 @@
     mounted() {
     },
     methods: {
-      onItemClick(item) {
-        if (this.currentFilterId === item.id) {
-          return;
-        }
-        this.currentFilterId = item.id;
-        let query = {
-          brandid: this.query.brandid,
-          query: item.type + '-' + item.id,
-          page: 0,
-          pagesize: 6
-        };
-        for (let i = 0, iLen = this.actives.length; i < iLen; i++) {
-          if (this.actives[i].type == item.type) {
-            this.actives[i].id = item.id;
-            this.actives[i].name = item.name;
-          } else {
-            this.actives[i].id = -1;
-            this.actives[i].name = this.filterList[i].name;
-          }
-        }
-      },
-      onExpandMore() {
-        this.expandMore = !this.expandMore;
-      },
       onExpand(index) {
         if (this.expanded) {
           if (this.selectIndex == index) {
@@ -142,12 +118,31 @@
       },
       filterChange(data) {
         this.actives[this.selectIndex].query = data;
-          this.actives[this.selectIndex].name = data.name;
-          let tempData = [];
+        let tempName;
+        if (Array.isArray(data)) {
+          let name = [];
+          data.map((item) => {
+            name.push(item.name);
+          })
+          tempName = name.join(",")
+        } else {
+          tempName = data.name;
+        }
+        if (!!tempName) {
+          this.actives[this.selectIndex].name = tempName;
+        }
+
+        let tempData = [];
         this.actives.map((item) => {
-//          item.map((subItem) => {
+          if (Array.isArray(item.query)) {
+            item.query.map((subItem) => {
+              if (subItem) {
+                tempData.push(subItem);
+              }
+            })
+          } else if (item.query){
             tempData.push(item.query);
-//          })
+          }
         });
         this.change(tempData);
         this.onCloseExpand();
@@ -201,15 +196,6 @@
         this.onChange(Object.assign({}, this.actives[this.selectIndex], data));
         if (!this.expanded) {
           this.selectIndex = -1;
-        }
-      },
-      onSelectLevel1(index) {
-        const items = this.filter[index].items;
-        this.actives[this.selectIndex].level1Index = index;
-        this.actives[this.selectIndex].index = -1;
-        this.activeIndex = this.actives[this.selectIndex];
-        if (items) {
-          this.filterSub = items;
         }
       },
       getPathById(data, query, callback) {
