@@ -12,7 +12,7 @@ export default {
   data () {
     return {
       filterData: [],
-      selectParams: '1-842' // 2-1161
+      selectParams: '1-842,5-6' // 2-1161
     }
   },
   components: {
