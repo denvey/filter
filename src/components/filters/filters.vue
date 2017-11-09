@@ -9,14 +9,14 @@
     </ul>
     <transition name="slider">
       <div v-show="expanded" class="filter-modal-overly" @click.self="onCloseExpand">
-        <div class="select-multi-wrap">
+        <!--<div class="select-multi-wrap">-->
           <template v-if="filterSub.length > 0" v-for="(item, index) in filterData">
-            <FilterItemTile v-if="item.display == 3" v-show="index == selectIndex" :filter="item" :query="queryData"
+            <FilterItemTile v-if="item.display == 3" v-show="index == selectIndex" :filter="item" :query="actives[index].query"
                             :filterChange="filterChange"></FilterItemTile>
-            <FilterItem v-else v-show="index == selectIndex" :filter="item" :query="queryData"
+            <FilterItem v-else v-show="index == selectIndex" :filter="item" :query="actives[index].query"
                         :filterChange="filterChange"/>
           </template>
-        </div>
+        <!--</div>-->
       </div>
     </transition>
   </div>
@@ -53,7 +53,12 @@
           lastIndex: 0,
           type: this.filters[i].type,
           name: this.filters[i].name,
-          query: ''
+          data: '',
+          query: []
+        };
+        let tempData3 = {
+          name: [],
+          data: []
         };
         if (query) {
           query.forEach((item) => {
@@ -62,17 +67,26 @@
               this.filters[i].items.forEach(function (res) {
                 if (res.id == arrTemp[1]) {
                   tempData.name = res.name;
-                  tempData.query = res;
+                  tempData.data = res;
                 }
               })
             }
             this.getPathById(this.filters[i], item, (data) => {
-                const ilen = data.length;
+              const ilen = data.length;
+              if (this.filters[i].display === 3) {
+                tempData3.name.push(data[ilen - 1].name);
+                tempData3.data.push(data[ilen - 1])
+              } else {
                 tempData.name = data[ilen - 1].name;
-                tempData.query = data[ilen - 1];
-                queryData.push(data);
+                tempData.data = data[ilen - 1];
+              }
+              tempData.query.push(data);
             })
           })
+        }
+        if (this.filters[i].display === 3) {
+          tempData.name = tempData3.name.join(',');
+          tempData.data = tempData3.data;
         }
         let tempObj = {};
         if (this.active && this.active[i]) {
@@ -117,35 +131,39 @@
         }
       },
       filterChange(data) {
-        this.actives[this.selectIndex].query = data;
-        let tempName;
-        if (Array.isArray(data)) {
-          let name = [];
-          data.map((item) => {
-            name.push(item.name);
-          })
-          tempName = name.join(",")
-        } else {
-          tempName = data.name;
-        }
-        if (!!tempName) {
-          this.actives[this.selectIndex].name = tempName;
-        }
-
-        let tempData = [];
-        this.actives.map((item) => {
-          if (Array.isArray(item.query)) {
-            item.query.map((subItem) => {
-              if (subItem) {
-                tempData.push(subItem);
-              }
+        if (!!data) {
+          this.actives[this.selectIndex].data = data;
+          let tempName;
+          if (Array.isArray(data)) {
+            let name = [];
+            data.map((item) => {
+              name.push(item.name);
             })
-          } else if (item.query){
-            tempData.push(item.query);
+            tempName = name.join(",")
+          } else {
+            tempName = data.name;
           }
-        });
-        this.change(tempData);
-        this.onCloseExpand();
+          if (!!tempName) {
+            this.actives[this.selectIndex].name = tempName;
+          }
+
+          let tempData = [];
+          this.actives.map((item) => {
+            if (Array.isArray(item.data)) {
+              item.data.map((subItem) => {
+                if (subItem) {
+                  tempData.push(subItem);
+                }
+              })
+            } else if (item.data) {
+              tempData.push(item.data);
+            }
+          });
+          this.change(tempData);
+          this.onCloseExpand();
+        } else {
+          this.actives[this.selectIndex].name = this.filters[this.selectIndex].name;
+        }
       },
 
       selectData(index, subIndex) {

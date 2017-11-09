@@ -1,15 +1,17 @@
 <template>
-  <div :class="['row']">
-    <dl v-for="(items, index) in filterItems"
-        :class="['filter-tile',`level-${index}`, `display-${filter.display}`]"
-        >
-      <dt>{{items.name}}</dt>
-      <dd v-for="(item, subIndex) in items.items"
-          @click="onSelected(index, subIndex, items.display, item)"
-          :class="['col-25', {selected: computedCur(index, subIndex, item)}]" :key="item.id">
-        <div>{{item.name}}</div>
-      </dd>
-    </dl>
+  <div :class="['level row ', `display-${filter.display}-wrap`]">
+    <div class="filter-tile-content">
+      <dl v-for="(items, index) in filterItems"
+          :class="['filter-tile',`level-${index}`, `display-${filter.display}`]"
+          >
+        <dt>{{items.name}}</dt>
+        <dd v-for="(item, subIndex) in items.items"
+            @click="onSelected(index, subIndex, items.display, item)"
+            :class="['col-25', {selected: computedCur(index, subIndex, item)}]" :key="item.id">
+          <div class="name">{{item.name}}</div>
+        </dd>
+      </dl>
+    </div>
     <div class="footer">
       <button class="btn" @click="resetClick">重置</button>
       <button class="btn orange" @click="completeClick">完成</button>
@@ -41,16 +43,17 @@
           data: []
         });
         this.query.map((queryItem) => {
-          if (queryItem[1].name == item.name) {
-            for (let i = 1, iLen = queryItem.length; i < iLen; i++) {
-              activeIndexArry[index].levelName = queryItem[i].name;
-              activeIndexArry[index].levelId = queryItem[i].Id;
-              activeIndexArry[index].active = [queryItem[i].Id];
-              activeIndexArry[index].data = [queryItem[i]];
-            }
+          if (queryItem[1].id == item.id || queryItem[1].name == item.name) {
+//            for (let i = 1, iLen = queryItem.length; i < iLen; i++) {
+//            activeIndexArry[index].levelName = queryItem[2].name;
+//            activeIndexArry[index].levelId = queryItem[2].Id;
+            activeIndexArry[index].active.push(queryItem[2].id);
+            activeIndexArry[index].data.push(queryItem[2]);
+//            }
           }
         });
       });
+      console.log(activeIndexArry);
       return {
         activeIndex: activeIndexArry,
         selectIndex: 0,
@@ -59,31 +62,6 @@
     },
     computed: {
       filterItems() {
-        /*let tempItem = [];
-        let i = 0;
-        tempItem.push(this.filter);
-        const handleItems = (data) => {
-          if (data && data.length > 0) {
-            let curIndex = 0;
-            const curId = this.activeIndex[this.selectIndex]['level' + i + 'Id'];
-            const curName = this.activeIndex[this.selectIndex]['level' + i + 'Name'];
-            if (curId || curName) {
-              for (let m = 0, mLen = data.length; m < mLen; m++) {
-                if (data[m].id === curId || data[m].name === curName) {
-                  curIndex = m;
-                }
-              }
-            }
-            const tempData = data[curIndex];
-            if (tempData && tempData.items !== undefined) {
-              tempItem.push(tempData.items);
-              i++;
-              handleItems(tempData.items);
-            }
-          }
-        };
-        handleItems(this.filter);
-        this.level = i;*/
         return this.filter.items;
       }
     },
@@ -94,15 +72,15 @@
       onSelected(index, subIndex, display, items) {
         let newState = {};
         newState = this.activeIndex[index];
-        const position = newState.active.indexOf(subIndex);
+        const position = newState.active.indexOf(items.id);
         if (position !== -1) {
           newState.active.splice(position, 1);
           newState.data.splice(position, 1)
         } else if (display === 5) {
-          newState.active = [subIndex];
+          newState.active = [items.id];
           newState.data = [items];
         } else {
-          newState.active.push(subIndex);
+          newState.active.push(items.id);
           newState.data.push(items);
         }
         this.activeIndex[index] = newState;
@@ -117,7 +95,7 @@
         return tempDate;
       },
       computedCur(index, subIndex, item) {
-        if (this.activeIndex[index].active.indexOf(subIndex) !== -1) {
+        if (this.activeIndex[index].active.indexOf(subIndex) !== -1 || this.activeIndex[index].active.indexOf(item.id) !== -1) {
           return true;
         }
         return false;
@@ -125,7 +103,9 @@
       resetClick() {
         this.activeIndex.map((item, index) => {
           this.activeIndex[index].active = [];
+          this.activeIndex[index].data = [];
         })
+        this.filterChange()
       },
       completeClick() {
         let tempData = [];
@@ -146,30 +126,46 @@
 
 <style lang="less">
 @import "./base.less";
+.level {
+  &.display-3-wrap {
+    height: 80%;
+    background: transparent;
+    .filter-tile-content {
+      background: #ffffff;
+      max-height: 80%;
+      .scrollable();
+    }
+  }
+}
+
 .filter-tile {
   overflow: hidden;
-  padding: 12px 12px 12px 0;
-  margin-left: 12px;
+  padding: 12px 12px 6px 0;
+  margin-left: 6px;
   position: relative;
   .hairline(bottom, #e0e0e0);
   dt {
     font-size: 14px;
-    margin-bottom: 12px;
+    margin-bottom: 6px;
+    margin-left: 6px;
   }
   dd {
     display: inline-block;
     width: 80px;
-    height: 35px;
-    line-height: 35px;
     text-align: center;
-    position: relative;
-    .hairline(all, #bcbcbc, 5px);
     font-size: 13px;
-    margin-right: 10px;
-    &:nth-child(4n+0) {
+    padding: 6px;
+    box-sizing: border-box;
+    /*&:nth-child(4n+0) {
       margin-right: 0;
+    }*/
+    .name {
+      position: relative;
+      height: 35px;
+      line-height: 36px;
+      .hairline(all, #bcbcbc, 5px);
     }
-    &.selected {
+    &.selected .name{
       background-color: #fff1ed;
       color: #f63;
       .hairline(all, #f63, 5px);

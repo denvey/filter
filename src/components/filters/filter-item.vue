@@ -1,5 +1,5 @@
 <template>
-  <div :class="['level row',`level-total-${filterItems.length}`, {'level-total-gt2': filterItems.length >= 2}]">
+  <div :class="['level row flexbox flex-wrap',`level-total-${filterItems.length}`, {'level-total-gt2': filterItems.length >= 2}]">
     <ul v-for="(items, index) in filterItems"
         :class="['select-item-wrap',`level-${index}`, `display-${items[0].display}`, 'col-' + colCss(items[0].display, filterItems.length)]"
         v-if="items.length > 0">
@@ -107,7 +107,6 @@
       computedCur(item, index, subIndex) {
         const id = this.activeIndex[this.selectIndex]['level' + index + 'Id'];
         const name = this.activeIndex[this.selectIndex]['level' + index + 'Name'];
-        console.log(name);
         if (id === item.id || name === item.name) {
           /*if (item.items === undefined || item.items.length === 0) {
               const tempData = queryData[this.selectIndex];
@@ -120,7 +119,6 @@
           }*/
           return true;
         } else if (index < this.level && subIndex === 0 && !id && !name) {
-          console.log(11);
           return true;
         }
         return false;
