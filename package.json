@@ -1,7 +1,7 @@
 {
   "name": "vue-filter",
   "version": "1.0.0",
-  "description": "A Vue.js project",
+  "description": "vue 筛选组件",
   "author": "denvey <dengwei87>",
   "main": "./src/filters/index.js",
   "scripts": {
