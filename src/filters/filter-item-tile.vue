@@ -53,7 +53,6 @@
           }
         });
       });
-      console.log(activeIndexArry);
       return {
         activeIndex: activeIndexArry,
         selectIndex: 0,
@@ -77,11 +76,12 @@
           newState.active.splice(position, 1);
           newState.data.splice(position, 1)
         } else if (display === 5) {
-          newState.active = [items.id];
-          newState.data = [items];
-        } else {
           newState.active.push(items.id);
           newState.data.push(items);
+        } else {
+          newState.active = [items.id];
+          newState.data = [items];
+
         }
         this.activeIndex[index] = newState;
       },
@@ -105,7 +105,7 @@
           this.activeIndex[index].active = [];
           this.activeIndex[index].data = [];
         })
-        this.filterChange()
+        this.filterChange([], 'reset');
       },
       completeClick() {
         let tempData = [];

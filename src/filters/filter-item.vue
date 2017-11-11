@@ -1,15 +1,18 @@
 <template>
   <div :class="['level row flexbox flex-wrap',`level-total-${filterItems.length}`, {'level-total-gt2': filterItems.length >= 2}]">
-    <ul v-for="(items, index) in filterItems"
-        :class="['select-item-wrap',`level-${index}`, `display-${items[0].display}`, 'col-' + colCss(items[0].display, filterItems.length)]"
-        v-if="items.length > 0">
-      <li v-for="(item, subIndex) in items"
-          @click="onSelected(index, subIndex, item)"
-          :class="[{cur: computedCur(item, index, subIndex)}]" :key="item.id">
-        <div>{{item.name}}</div>
-      </li>
-    </ul>
-    <ul v-else></ul>
+      <ul v-for="(items, index) in filterItems"
+          :class="['select-item-wrap',`level-${index}`, `display-${items.display}`, 'col-' + colCss(items.display, filterItems.length)]"
+          v-if="items.items.length > 0">
+        <li v-for="(item, subIndex) in items.items"
+            @click="onSelected(index, subIndex, item)"
+            :class="[{cur: computedCur(item, index, subIndex)}]" :key="item.id">
+          <div class="item-wrap flexbox">
+            <div class="item-name">{{item.name}}</div>
+            <div class="item-count" v-if="item.count">{{item.count}}</div>
+          </div>
+        </li>
+      </ul>
+      <ul v-else></ul>
   </div>
 </template>
 
@@ -54,7 +57,7 @@
       filterItems() {
         let tempItem = [];
         let i = 0;
-        tempItem.push(this.filter.items);
+        tempItem.push(this.filter);
         const handleItems = (data) => {
           if (data && data.length > 0) {
             let curIndex = 0;
@@ -69,7 +72,7 @@
             }
             const tempData = data[curIndex];
             if (tempData && tempData.items !== undefined) {
-              tempItem.push(tempData.items);
+              tempItem.push(tempData);
               i++;
               handleItems(tempData.items);
             }

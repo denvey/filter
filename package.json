@@ -1,9 +1,9 @@
 {
-  "name": "vue-filter",
-  "version": "1.0.0",
+  "name": "@gfe/vue-filter",
+  "version": "1.0.8",
   "description": "vue 筛选组件",
-  "author": "denvey <dengwei87>",
-  "main": "./src/filters/index.js",
+  "author": "dengwei04@meituan.com",
+  "main": "./src/filters/filters.vue",
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "npm run dev",

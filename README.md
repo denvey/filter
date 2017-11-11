@@ -58,9 +58,21 @@
 
 ### 参数
 
-```js
-filters Array    显示的数据
+```js  
 query   String   需要选中的item,类型+id(type-id),如1-1000，3-10001
 change  Function 选择完成触发的回调函数 
+filters Array    显示的数据 
+filters主要使用type、name、id、display、count，其他字段可以自定义
+[{
+    type: xxx,
+    name: xxxx,
+    id: xxxx,
+    count: xxx,
+    display: 1  //  0 默认竖向显示
+                    1 横向显示
+                    2
+                    3  横铺
+                    5  多选（目前只支持横铺模式下多选） 
+}]
 ```
 

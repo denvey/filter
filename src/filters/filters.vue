@@ -74,6 +74,7 @@
             this.getPathById(this.filters[i], item, (data) => {
               const ilen = data.length;
               if (this.filters[i].display === 3) {
+                console.log(data);
                 tempData3.name.push(data[ilen - 1].name);
                 tempData3.data.push(data[ilen - 1])
               } else {
@@ -85,8 +86,10 @@
           })
         }
         if (this.filters[i].display === 3) {
-          tempData.name = tempData3.name.join(',');
-          tempData.data = tempData3.data;
+          if (tempData3.name.length > 0) {
+            tempData.name = tempData3.name.join(',');
+            tempData.data = tempData3.data;
+          }
         }
         let tempObj = {};
         if (this.active && this.active[i]) {
@@ -130,9 +133,9 @@
           this.selectIndex = -1;
         }
       },
-      filterChange(data) {
-        if (!!data) {
-          this.actives[this.selectIndex].data = data;
+      filterChange(data, type) {
+        this.actives[this.selectIndex].data = data;
+        if (!this.isEmpty(data)) {
           let tempName;
           if (Array.isArray(data)) {
             let name = [];
@@ -146,26 +149,39 @@
           if (!!tempName) {
             this.actives[this.selectIndex].name = tempName;
           }
-
-          let tempData = [];
-          this.actives.map((item) => {
-            if (Array.isArray(item.data)) {
-              item.data.map((subItem) => {
-                if (subItem) {
-                  tempData.push(subItem);
-                }
-              })
-            } else if (item.data) {
-              tempData.push(item.data);
-            }
-          });
-          this.change(tempData);
-          this.onCloseExpand();
         } else {
           this.actives[this.selectIndex].name = this.filters[this.selectIndex].name;
         }
+        let tempData = [];
+        this.actives.map((item) => {
+          if (Array.isArray(item.data)) {
+            item.data.map((subItem) => {
+              if (subItem) {
+                tempData.push(subItem);
+              }
+            })
+          } else if (item.data) {
+            tempData.push(item.data);
+          }
+        });
+        if (type !== 'reset') {
+          this.change(tempData);
+          this.onCloseExpand();
+        }
       },
-
+      isEmpty(obj) {
+        // 本身为空直接返回true
+        if (obj == null) return true;
+        // 然后可以根据长度判断，在低版本的ie浏览器中无法这样判断。
+        if (obj.length > 0)    return false;
+        if (obj.length === 0)  return true;
+        const hasOwnProperty = Object.prototype.hasOwnProperty;
+        // 最后通过属性长度判断。
+        for (var key in obj) {
+          if (hasOwnProperty.call(obj, key)) return false;
+        }
+        return true;
+      },
       selectData(index, subIndex) {
         const curIndex = subIndex || 0;
         const data = this.filterData[index].items;

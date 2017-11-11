@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Filters from './components/filters'
+import Filters from '../src/filters'
 
 export default {
   name: 'app',
@@ -19,7 +19,9 @@ export default {
     Filters
   },
   mounted () {
-    fetch('https://www.easy-mock.com/mock/58ff3f8a5e43ae5dbea60053/qqshsh/shopping/brand/shop/filter')
+    
+    // fetch('https://www.easy-mock.com/mock/58ff3f8a5e43ae5dbea60053/qqshsh/shopping/brand/shop/filter')
+    fetch('https://www.easy-mock.com/mock/58ff3f8a5e43ae5dbea60053/qqshsh/communitylife/house/searchlist')
       .then((res) => {
         return res.json()
       }).then((data) => {
