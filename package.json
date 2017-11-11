@@ -1,6 +1,6 @@
 {
   "name": "@gfe/vue-filter",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "vue 筛选组件",
   "author": "dengwei04@meituan.com",
   "main": "./src/filters/filters.vue",
