@@ -20,8 +20,8 @@ export default {
   },
   mounted () {
     
-    // fetch('https://www.easy-mock.com/mock/58ff3f8a5e43ae5dbea60053/qqshsh/shopping/brand/shop/filter')
-    fetch('https://www.easy-mock.com/mock/58ff3f8a5e43ae5dbea60053/qqshsh/communitylife/house/searchlist')
+    fetch('https://www.easy-mock.com/mock/58ff3f8a5e43ae5dbea60053/qqshsh/shopping/brand/shop/filter')
+    // fetch('https://www.easy-mock.com/mock/58ff3f8a5e43ae5dbea60053/qqshsh/communitylife/house/searchlist')
       .then((res) => {
         return res.json()
       }).then((data) => {
