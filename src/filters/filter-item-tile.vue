@@ -1,5 +1,5 @@
 <template>
-  <div :class="['level row ', `display-${filter.display}-wrap`]">
+  <div :class="['level row ', `display-${filter.display}-wrap`]" @click.self="closeExpand">
     <div class="filter-tile-content">
       <dl v-for="(items, index) in filterItems"
           :class="['filter-tile',`level-${index}`, `display-${filter.display}`]"
@@ -27,6 +27,9 @@
         type: Object
       },
       filterChange: {
+        type: Function
+      },
+      closeExpand: {
         type: Function
       },
       query: {

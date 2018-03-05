@@ -12,7 +12,7 @@
         <!--<div class="select-multi-wrap">-->
           <template v-if="filterSub.length > 0" v-for="(item, index) in filterData">
             <FilterItemTile v-if="item.display == 3" v-show="index == selectIndex" :filter="item" :query="actives[index].query"
-                            :filterChange="filterChange"></FilterItemTile>
+                            :filterChange="filterChange" :closeExpand="onCloseExpand"></FilterItemTile>
             <FilterItem v-else v-show="index == selectIndex" :filter="item" :query="actives[index].query"
                         :filterChange="filterChange"/>
           </template>
